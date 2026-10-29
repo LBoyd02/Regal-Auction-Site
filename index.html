@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Regal Auctions Flipping Dashboard</title>
   <style>
     :root {
@@ -36,14 +36,22 @@
       padding: 0;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
     }
 
     /* Top Sticky Header */
@@ -51,38 +59,43 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(13, 19, 34, 0.94);
+      background: rgba(13, 19, 34, 0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 12px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+      gap: 14px;
+      width: 100%;
+      max-width: 100vw;
+      box-sizing: border-box;
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     .logo-badge {
       background: linear-gradient(135deg, #0284c7, #38bdf8);
       color: #fff;
       font-weight: 800;
-      font-size: 13px;
-      padding: 6px 10px;
-      border-radius: 8px;
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 6px;
       letter-spacing: 0.5px;
       box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+      white-space: nowrap;
     }
 
     h1 {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 700;
       letter-spacing: -0.3px;
+      white-space: nowrap;
     }
 
     .stats-pill {
@@ -90,11 +103,12 @@
       align-items: center;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border);
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       font-size: 12px;
       color: var(--text-muted);
-      gap: 6px;
+      gap: 5px;
+      white-space: nowrap;
     }
 
     .stats-pill strong {
@@ -104,14 +118,21 @@
     .header-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+
+    .header-actions-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .btn {
       background: #1e293b;
       color: var(--text-main);
       border: 1px solid var(--border);
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
@@ -121,6 +142,7 @@
       gap: 6px;
       transition: all 0.15s ease;
       text-decoration: none;
+      white-space: nowrap;
     }
 
     .btn:hover {
@@ -148,6 +170,8 @@
       font-weight: 600;
       cursor: pointer;
       outline: none;
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .sort-select:focus {
@@ -162,7 +186,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       flex-wrap: wrap;
       transition: all 0.25s ease;
     }
@@ -176,10 +200,21 @@
       gap: 8px;
     }
 
+    .assumptions-status-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 2px 8px;
+      border-radius: 12px;
+      display: none;
+    }
+
     .assumptions-grid {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
@@ -189,6 +224,12 @@
       gap: 6px;
       font-size: 12px;
       color: var(--text-muted);
+    }
+
+    .assumptions-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .assumption-field input {
@@ -377,6 +418,8 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .feed-header {
@@ -384,16 +427,20 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 4px;
+      width: 100%;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .feed-count {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-
-    .feed-count strong {
-      color: var(--text-main);
-      font-weight: 700;
+    #vehicle-feed-container {
+      width: 100%;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
     /* Vehicle Card */
@@ -405,6 +452,10 @@
       overflow: hidden;
       transition: all 0.2s ease;
       position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .vehicle-card:hover {
@@ -733,31 +784,167 @@
     }
 
     @media (max-width: 960px) {
+      header {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+      }
+      .header-left {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 6px;
+      }
+      .header-left h1 {
+        font-size: 15px;
+      }
+      .header-right {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
       .mobile-filter-btn {
         display: inline-flex;
       }
+      .header-actions-row {
+        display: flex;
+        width: 100%;
+        gap: 8px;
+      }
+      .header-actions-row .btn {
+        flex: 1;
+        justify-content: center;
+        text-align: center;
+        padding: 9px 6px;
+        font-size: 13px;
+        white-space: nowrap;
+      }
+      .sort-select {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box;
+        padding: 9px 10px;
+        font-size: 13px;
+      }
+      #assumptions-panel {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .assumptions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .assumption-field {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #162035;
+        padding: 6px 8px;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      .assumption-field input {
+        width: 65px;
+      }
       .app-container {
         flex-direction: column;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
       }
       aside {
         display: none;
         width: 100%;
+        max-width: 100vw;
         max-height: none;
         border-right: none;
         border-bottom: 1px solid var(--border);
+        box-sizing: border-box;
+        padding: 14px 12px;
       }
       aside.mobile-open {
         display: flex;
       }
-      .card-media {
+      main {
         width: 100%;
-        height: 240px;
+        max-width: 100vw;
+        padding: 12px 10px;
+        max-height: none;
+        overflow-y: visible;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+      }
+      .feed-header {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+      #vehicle-feed-container {
+        width: 100%;
+        max-width: 100%;
+        align-items: center;
       }
       .vehicle-card {
+        width: 100%;
+        max-width: 100%;
         flex-direction: column;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+      .card-media {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        height: 220px;
+        box-sizing: border-box;
+      }
+      .card-body {
+        padding: 14px 12px;
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+      }
+      .vehicle-title {
+        font-size: 16px;
+        word-break: break-word;
       }
       .financial-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 8px 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .fin-val {
+        font-size: 14px;
+      }
+      .card-actions {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .action-btn {
+        flex: 1;
+        min-width: 80px;
+        justify-content: center;
+        padding: 8px 6px;
+        font-size: 11px;
+        text-align: center;
       }
     }
   </style>
@@ -770,24 +957,26 @@
       <span class="logo-badge">REGAL AUCTIONS</span>
       <h1>Vehicle Flipping Feed</h1>
       <div class="stats-pill">
-        Showing <strong id="visible-count">0</strong> of <strong id="total-count">0</strong> vehicles
+        Showing <strong id="visible-count">0</strong> of <strong id="total-count">0</strong>
       </div>
     </div>
 
     <div class="header-right">
-      <button class="btn mobile-filter-btn" id="mobile-toggle-btn" onclick="toggleMobileSidebar()">
-        🔍 Filters
-      </button>
+      <div class="header-actions-row">
+        <button class="btn mobile-filter-btn" id="mobile-toggle-btn" onclick="toggleMobileSidebar()">
+          🔍 Filters
+        </button>
 
-      <button class="btn" id="toggle-assumptions-btn" onclick="toggleAssumptions()">
-        ⚙️ Assumptions
-      </button>
+        <button class="btn" id="toggle-assumptions-btn" onclick="toggleAssumptions()">
+          ⚙️ Assumptions
+        </button>
+      </div>
 
       <select class="sort-select" id="sort-select" onchange="handleSortChange(this.value)">
-        <option value="score_desc">🔥 Deal Score: Highest First</option>
-        <option value="score_asc">Deal Score: Lowest First</option>
-        <option value="bid_desc">💰 Max Bid Ceiling: Highest First</option>
-        <option value="resale_desc">📈 Est Resale: Highest First</option>
+        <option value="score_desc">🔥 Score: High to Low</option>
+        <option value="score_asc">Score: Low to High</option>
+        <option value="bid_desc">💰 Max Bid: High to Low</option>
+        <option value="resale_desc">📈 Resale: High to Low</option>
         <option value="year_desc">📅 Year: Newest First</option>
         <option value="year_asc">📅 Year: Oldest First</option>
         <option value="odo_asc">🚗 Mileage: Lowest First</option>
@@ -799,26 +988,34 @@
   <!-- Dynamic Assumptions Input Bar -->
   <div id="assumptions-panel">
     <div class="assumptions-title">
-      <span>⚙️ Global Flipping Assumptions (Live Recalculation)</span>
+      <span>⚙️ Flipping Assumptions</span>
+      <span id="assumptions-status" class="assumptions-status-badge">✓ Applied</span>
     </div>
     <div class="assumptions-grid">
       <div class="assumption-field">
-        <label>Target Profit:</label>
-        <input type="number" id="in-target-profit" value="1500" step="100" oninput="handleAssumptionsChange()">
+        <label>Target Profit ($):</label>
+        <input type="number" id="in-target-profit" value="1500" step="100" onkeydown="if(event.key==='Enter') applyAssumptions()">
       </div>
       <div class="assumption-field">
-        <label>Safety Buffer:</label>
-        <input type="number" id="in-safety-buffer" value="500" step="50" oninput="handleAssumptionsChange()">
+        <label>Safety Buffer ($):</label>
+        <input type="number" id="in-safety-buffer" value="500" step="50" onkeydown="if(event.key==='Enter') applyAssumptions()">
       </div>
       <div class="assumption-field">
-        <label>Detailing & Recon:</label>
-        <input type="number" id="in-detailing" value="250" step="50" oninput="handleAssumptionsChange()">
+        <label>Detailing & Recon ($):</label>
+        <input type="number" id="in-detailing" value="250" step="50" onkeydown="if(event.key==='Enter') applyAssumptions()">
       </div>
       <div class="assumption-field">
-        <label>Fuel & Transport:</label>
-        <input type="number" id="in-fuel" value="100" step="25" oninput="handleAssumptionsChange()">
+        <label>Fuel & Transport ($):</label>
+        <input type="number" id="in-fuel" value="100" step="25" onkeydown="if(event.key==='Enter') applyAssumptions()">
       </div>
-      <button class="btn" style="padding: 4px 10px; font-size: 11px;" onclick="resetAssumptions()">Reset Defaults</button>
+      <div class="assumptions-actions">
+        <button class="btn btn-primary" id="apply-assumptions-btn" onclick="applyAssumptions()">
+          ⚡ Apply Assumptions
+        </button>
+        <button class="btn" onclick="resetAssumptions()">
+          Reset
+        </button>
+      </div>
     </div>
   </div>
 
@@ -928,9 +1125,14 @@
         </div>
       </div>
 
-      <div id="vehicle-feed-container" style="display: flex; flex-direction: column; gap: 16px;">
+      <div id="vehicle-feed-container">
         <!-- Dynamically rendered vehicle cards -->
       </div>
+
+      <div id="feed-loader" style="text-align:center; padding:18px; color:var(--text-faint); font-size:12px; display:none;">
+        <span id="loader-text">Loading more vehicles...</span>
+      </div>
+      <div id="scroll-sentinel" style="height:20px;"></div>
 
       <div id="empty-state" class="empty-state" style="display:none;">
         <h3>No vehicles matched your current filters</h3>
@@ -987,6 +1189,7 @@
       let maxBid = null;
       let dealScore = null;
       let scoreCategory = "gray";
+      let scoreLabel = "NO COMPS";
 
       if (typeof resale === "number" && resale > 0) {
         buyerFee = calculateBuyerFee(resale);
@@ -994,22 +1197,268 @@
         maxBid = Math.max(0, Math.floor(rawBid / 10) * 10);
 
         if (typeof lot.reserve_num === "number") {
-          // Formula: MIN(100, MAX(0, ROUND(50 + (maxBid - reserve) / 100, 0)))
           dealScore = Math.min(100, Math.max(0, Math.round(50 + (maxBid - lot.reserve_num) / 100)));
         } else if (lot.reserve_str && lot.reserve_str.toLowerCase().includes("unreserved")) {
-          // Formula: MIN(100, ROUND(60 + maxBid / 250, 0))
           dealScore = Math.min(100, Math.max(0, Math.round(60 + maxBid / 250)));
         } else {
-          // Formula: MIN(90, ROUND(40 + maxBid / 300, 0))
           dealScore = Math.min(90, Math.max(0, Math.round(40 + maxBid / 300)));
         }
 
-        if (dealScore >= 70) scoreCategory = "green";
-        else if (dealScore >= 50) scoreCategory = "yellow";
-        else scoreCategory = "red";
+        if (dealScore >= 70) {
+          scoreCategory = "green";
+          scoreLabel = "GREAT DEAL";
+        } else if (dealScore >= 50) {
+          scoreCategory = "yellow";
+          scoreLabel = "FAIR DEAL";
+        } else {
+          scoreCategory = "red";
+          scoreLabel = "THIN MARGIN";
+        }
       }
 
-      return { buyerFee, maxBid, dealScore, scoreCategory };
+      return { buyerFee, maxBid, dealScore, scoreClass: "score-" + scoreCategory, scoreLabel };
+    }
+
+    // Formatters
+    const fmtMoney = num => typeof num === "number" ? "$" + num.toLocaleString() : "N/A";
+
+    // Precomputed Card DOM Element Cache for 60fps instant in-place updates
+    const CARD_CACHE = new Array(RAW_LOTS.length);
+
+    function getOrCreateCard(idx) {
+      if (CARD_CACHE[idx]) return CARD_CACHE[idx];
+
+      const lot = RAW_LOTS[idx];
+      const card = document.createElement("div");
+      card.className = "vehicle-card";
+
+      let resBadgeClass = "reserve-subject";
+      let resBadgeText = lot.reserve_str;
+      if (lot.reserve_str && lot.reserve_str.toLowerCase().includes("unreserved")) {
+        resBadgeClass = "reserve-unreserved";
+        resBadgeText = "UNRESERVED";
+      } else if (typeof lot.reserve_num === "number") {
+        resBadgeClass = "reserve-numeric";
+        resBadgeText = "$" + lot.reserve_num.toLocaleString() + " RESERVE";
+      }
+
+      const declTokens = lot.declarations.split(",").map(s => s.trim()).filter(Boolean);
+      const declHtml = declTokens.map(tok => {
+        const tokL = tok.toLowerCase();
+        let cls = "decl-clean";
+        if (tokL.includes("tow") || tokL.includes("frame") || tokL.includes("mechanical") || tokL.includes("noise")) {
+          cls = "decl-danger";
+        } else if (tokL.includes("as is") || tokL.includes("repo")) {
+          cls = "decl-warning";
+        }
+        return `<span class="decl-badge ${cls}">${tok}</span>`;
+      }).join(" ");
+
+      card.innerHTML = `
+        <div class="card-media" onclick="openLightbox('${lot.img_path}', '${lot.year} ${lot.make} ${lot.model}')">
+          <img src="${lot.img_path}" loading="lazy" alt="${lot.make} ${lot.model}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\' viewBox=\'0 0 400 300\'><rect width=\'400\' height=\'300\' fill=\'%231e293b\'/><text x=\'50%\' y=\'50%\' fill=\'%2364748b\' font-size=\'18\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Photo Unavailable</text></svg>'">
+          <span class="lot-badge">#${lot.lot}</span>
+          <span class="reserve-badge ${resBadgeClass}">${resBadgeText}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-header-row">
+            <div>
+              <div class="vehicle-title">${lot.year} ${lot.make} ${lot.model}</div>
+              <div class="vehicle-specs-line">
+                <span>🚗 ${lot.odometer_str}</span>
+                <span>⚙️ ${lot.engine || 'Engine N/A'}</span>
+              </div>
+            </div>
+            <div class="score-badge score-gray">
+              <span class="score-num">--</span>
+              <span class="score-label">NO COMPS</span>
+            </div>
+          </div>
+          <div class="financial-grid">
+            <div class="fin-box">
+              <span class="fin-title">Est. Resale Price</span>
+              <span class="fin-val highlight-blue">${fmtMoney(lot.est_resale)}</span>
+            </div>
+            <div class="fin-box">
+              <span class="fin-title">Max Bid Ceiling</span>
+              <span class="fin-val highlight-green val-maxbid">--</span>
+            </div>
+            <div class="fin-box">
+              <span class="fin-title">Reserve / Status</span>
+              <span class="fin-val">${lot.reserve_str}</span>
+            </div>
+            <div class="fin-box">
+              <span class="fin-title">Est. Buyer Fee</span>
+              <span class="fin-val val-fee">--</span>
+            </div>
+          </div>
+          <div class="declarations-row">
+            <span style="font-weight:700; color:var(--text-faint); margin-right:4px;">Disclosures:</span>
+            ${declHtml}
+          </div>
+          <div class="card-actions">
+            ${lot.cond_link ? `<a class="action-btn action-btn-cond" href="${lot.cond_link}" target="_blank">📋 Condition Report</a>` : ''}
+            <a class="action-btn" href="${lot.fb_link}" target="_blank">🔎 FB Comps</a>
+            <a class="action-btn" href="${lot.at_link}" target="_blank">🚗 AutoTrader Comps</a>
+          </div>
+        </div>
+      `;
+
+      card._maxBidEl = card.querySelector(".val-maxbid");
+      card._feeEl = card.querySelector(".val-fee");
+      card._scoreBadge = card.querySelector(".score-badge");
+      card._scoreNum = card.querySelector(".score-num");
+      card._scoreLabel = card.querySelector(".score-label");
+
+      CARD_CACHE[idx] = card;
+      return card;
+    }
+
+    function syncCardFinances(card, fin) {
+      card._maxBidEl.textContent = fmtMoney(fin.maxBid);
+      card._feeEl.textContent = fmtMoney(fin.buyerFee);
+      card._scoreNum.textContent = fin.dealScore !== null ? fin.dealScore : "--";
+      card._scoreLabel.textContent = fin.scoreLabel;
+      card._scoreBadge.className = `score-badge ${fin.scoreClass}`;
+    }
+
+    // Compute finances across all lots in memory
+    function recalculateAllFinances() {
+      for (let i = 0; i < RAW_LOTS.length; i++) {
+        RAW_LOTS[i].fin = computeFinances(RAW_LOTS[i]);
+        if (CARD_CACHE[i]) {
+          syncCardFinances(CARD_CACHE[i], RAW_LOTS[i].fin);
+        }
+      }
+    }
+
+    // Progressive Infinite-Scroll Rendering (Zero Lag, Instant Paint)
+    const PAGE_CHUNK = 30;
+    let filteredIndices = [];
+    let displayedCount = 0;
+
+    function renderFeed(resetPagination = true) {
+      const container = document.getElementById("vehicle-feed-container");
+      const emptyState = document.getElementById("empty-state");
+      const loader = document.getElementById("feed-loader");
+
+      if (resetPagination) {
+        // Filter & Sort
+        const matched = [];
+        for (let i = 0; i < RAW_LOTS.length; i++) {
+          const lot = RAW_LOTS[i];
+          const fin = lot.fin;
+
+          if (state.selectedMakes.size > 0 && !state.selectedMakes.has(lot.make)) continue;
+
+          if (state.search) {
+            const term = `${lot.lot} ${lot.year} ${lot.make} ${lot.model} ${lot.engine} ${lot.declarations}`.toLowerCase();
+            if (!term.includes(state.search)) continue;
+          }
+
+          if (state.scoreFilter === "great" && (fin.dealScore === null || fin.dealScore < 70)) continue;
+          if (state.scoreFilter === "fair" && (fin.dealScore === null || fin.dealScore < 50 || fin.dealScore >= 70)) continue;
+          if (state.scoreFilter === "low" && (fin.dealScore === null || fin.dealScore >= 50)) continue;
+          if (state.scoreFilter === "nocomp" && fin.dealScore !== null) continue;
+
+          if (state.reserveFilter === "unreserved" && !(lot.reserve_str && lot.reserve_str.toLowerCase().includes("unreserved"))) continue;
+          if (state.reserveFilter === "numeric" && typeof lot.reserve_num !== "number") continue;
+
+          if (state.minYear !== null && lot.year < state.minYear) continue;
+          if (state.maxYear !== null && lot.year > state.maxYear) continue;
+
+          if (state.minBid !== null && (fin.maxBid === null || fin.maxBid < state.minBid)) continue;
+          if (state.maxBid !== null && (fin.maxBid === null || fin.maxBid > state.maxBid)) continue;
+
+          if (state.odoFilter === "100k" && (lot.odometer === null || lot.odometer >= 100000)) continue;
+          if (state.odoFilter === "150k" && (lot.odometer === null || lot.odometer >= 150000)) continue;
+          if (state.odoFilter === "200k" && (lot.odometer === null || lot.odometer >= 200000)) continue;
+
+          if (state.declFilter === "clean") {
+            const dLower = (lot.declarations || "").toLowerCase();
+            if (dLower.includes("tow") || dLower.includes("frame damage") || dLower.includes("mechanical problems") || dLower.includes("engine noise")) continue;
+          }
+          if (state.declFilter === "warnings") {
+            const dLower = (lot.declarations || "").toLowerCase();
+            if (!dLower.includes("tow") && !dLower.includes("mechanical") && !dLower.includes("frame") && !dLower.includes("noise")) continue;
+          }
+          if (state.declFilter === "repo") {
+            if (!(lot.declarations || "").toLowerCase().includes("repo")) continue;
+          }
+
+          matched.push(i);
+        }
+
+        // Sort indices
+        matched.sort((idxA, idxB) => {
+          const a = RAW_LOTS[idxA];
+          const b = RAW_LOTS[idxB];
+          switch (state.sortBy) {
+            case "score_desc":
+              return (b.fin.dealScore ?? -1) - (a.fin.dealScore ?? -1);
+            case "score_asc":
+              return (a.fin.dealScore ?? 999) - (b.fin.dealScore ?? 999);
+            case "bid_desc":
+              return (b.fin.maxBid ?? -1) - (a.fin.maxBid ?? -1);
+            case "resale_desc":
+              return (b.est_resale ?? -1) - (a.est_resale ?? -1);
+            case "year_desc":
+              return b.year - a.year;
+            case "year_asc":
+              return a.year - b.year;
+            case "odo_asc":
+              return (a.odometer ?? 9999999) - (b.odometer ?? 9999999);
+            case "lot_asc":
+            default:
+              return idxA - idxB;
+          }
+        });
+
+        filteredIndices = matched;
+        displayedCount = 0;
+
+        document.getElementById("visible-count").textContent = filteredIndices.length;
+        document.getElementById("total-count").textContent = RAW_LOTS.length;
+        document.getElementById("feed-visible-count").textContent = filteredIndices.length;
+
+        if (filteredIndices.length === 0) {
+          container.replaceChildren();
+          emptyState.style.display = "block";
+          loader.style.display = "none";
+          return;
+        }
+
+        emptyState.style.display = "none";
+        container.replaceChildren();
+      }
+
+      // Append next batch smoothly
+      const nextCount = Math.min(displayedCount + PAGE_CHUNK, filteredIndices.length);
+      const frag = document.createDocumentFragment();
+
+      for (let i = displayedCount; i < nextCount; i++) {
+        const idx = filteredIndices[i];
+        const card = getOrCreateCard(idx);
+        syncCardFinances(card, RAW_LOTS[idx].fin);
+        frag.appendChild(card);
+      }
+
+      container.appendChild(frag);
+      displayedCount = nextCount;
+
+      loader.style.display = displayedCount < filteredIndices.length ? "block" : "none";
+    }
+
+    // Setup intersection observer for infinite scroll
+    function initInfiniteScroll() {
+      const sentinel = document.getElementById("scroll-sentinel");
+      if (!sentinel) return;
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && displayedCount < filteredIndices.length) {
+          renderFeed(false);
+        }
+      }, { rootMargin: "400px" });
+      observer.observe(sentinel);
     }
 
     // Initialize Make List Filter
@@ -1042,7 +1491,7 @@
     function handleMakeToggle(make, checked) {
       if (checked) state.selectedMakes.add(make);
       else state.selectedMakes.delete(make);
-      render();
+      renderFeed(true);
     }
 
     function selectAllMakes(selectAll) {
@@ -1052,37 +1501,41 @@
         if (selectAll) state.selectedMakes.add(cb.value);
         else state.selectedMakes.delete(cb.value);
       });
-      render();
+      renderFeed(true);
     }
 
-    // Filter Handlers
+    // Debounced Search Handler
+    let searchDebounceTimer = null;
     function handleSearch(val) {
-      state.search = (val || "").trim().toLowerCase();
-      render();
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        state.search = (val || "").trim().toLowerCase();
+        renderFeed(true);
+      }, 120);
     }
 
     function setScoreFilter(val, el) {
       state.scoreFilter = val;
       updateActivePill(el);
-      render();
+      renderFeed(true);
     }
 
     function setReserveFilter(val, el) {
       state.reserveFilter = val;
       updateActivePill(el);
-      render();
+      renderFeed(true);
     }
 
     function setOdoFilter(val, el) {
       state.odoFilter = val;
       updateActivePill(el);
-      render();
+      renderFeed(true);
     }
 
     function setDeclFilter(val, el) {
       state.declFilter = val;
       updateActivePill(el);
-      render();
+      renderFeed(true);
     }
 
     function handleYearFilter() {
@@ -1090,7 +1543,7 @@
       const maxVal = parseInt(document.getElementById("max-year").value, 10);
       state.minYear = isNaN(minVal) ? null : minVal;
       state.maxYear = isNaN(maxVal) ? null : maxVal;
-      render();
+      renderFeed(true);
     }
 
     function handleBidFilter() {
@@ -1098,12 +1551,12 @@
       const maxVal = parseFloat(document.getElementById("max-bid").value);
       state.minBid = isNaN(minVal) ? null : minVal;
       state.maxBid = isNaN(maxVal) ? null : maxVal;
-      render();
+      renderFeed(true);
     }
 
     function handleSortChange(val) {
       state.sortBy = val;
-      render();
+      renderFeed(true);
     }
 
     function updateActivePill(el) {
@@ -1139,16 +1592,27 @@
       document.getElementById("max-bid").value = "";
 
       selectAllMakes(true);
-      render();
+      renderFeed(true);
     }
 
-    // Live Assumptions Handlers
-    function handleAssumptionsChange() {
+    // Assumptions apply / reset handlers
+    function applyAssumptions() {
       state.targetProfit = parseFloat(document.getElementById("in-target-profit").value) || 0;
       state.safetyBuffer = parseFloat(document.getElementById("in-safety-buffer").value) || 0;
       state.detailing = parseFloat(document.getElementById("in-detailing").value) || 0;
       state.fuel = parseFloat(document.getElementById("in-fuel").value) || 0;
-      render();
+
+      recalculateAllFinances();
+      renderFeed(true);
+
+      const status = document.getElementById("assumptions-status");
+      if (status) {
+        status.textContent = "✓ Recalculated";
+        status.style.display = "inline-block";
+        setTimeout(() => {
+          status.style.display = "none";
+        }, 2000);
+      }
     }
 
     function resetAssumptions() {
@@ -1156,7 +1620,7 @@
       document.getElementById("in-safety-buffer").value = 500;
       document.getElementById("in-detailing").value = 250;
       document.getElementById("in-fuel").value = 100;
-      handleAssumptionsChange();
+      applyAssumptions();
     }
 
     function toggleAssumptions() {
@@ -1195,224 +1659,11 @@
       if (e.key === "Escape") closeLightbox();
     });
 
-    // Formatters
-    const fmtMoney = num => typeof num === "number" ? "$" + num.toLocaleString() : "N/A";
-
-    // Main Render Pipeline
-    function render() {
-      const container = document.getElementById("vehicle-feed-container");
-      const emptyState = document.getElementById("empty-state");
-
-      // 1. Process finances & filter
-      const filtered = [];
-
-      for (let i = 0; i < RAW_LOTS.length; i++) {
-        const lot = RAW_LOTS[i];
-        const fin = computeFinances(lot);
-
-        // Make Filter
-        if (state.selectedMakes.size > 0 && !state.selectedMakes.has(lot.make)) continue;
-
-        // Search Filter
-        if (state.search) {
-          const term = `${lot.lot} ${lot.year} ${lot.make} ${lot.model} ${lot.engine} ${lot.declarations}`.toLowerCase();
-          if (!term.includes(state.search)) continue;
-        }
-
-        // Score Filter
-        if (state.scoreFilter === "great" && (fin.dealScore === null || fin.dealScore < 70)) continue;
-        if (state.scoreFilter === "fair" && (fin.dealScore === null || fin.dealScore < 50 || fin.dealScore >= 70)) continue;
-        if (state.scoreFilter === "low" && (fin.dealScore === null || fin.dealScore >= 50)) continue;
-        if (state.scoreFilter === "nocomp" && fin.dealScore !== null) continue;
-
-        // Reserve Filter
-        if (state.reserveFilter === "unreserved" && !(lot.reserve_str && lot.reserve_str.toLowerCase().includes("unreserved"))) continue;
-        if (state.reserveFilter === "numeric" && typeof lot.reserve_num !== "number") continue;
-
-        // Year Filter
-        if (state.minYear !== null && lot.year < state.minYear) continue;
-        if (state.maxYear !== null && lot.year > state.maxYear) continue;
-
-        // Max Bid Filter
-        if (state.minBid !== null && (fin.maxBid === null || fin.maxBid < state.minBid)) continue;
-        if (state.maxBid !== null && (fin.maxBid === null || fin.maxBid > state.maxBid)) continue;
-
-        // Odometer Filter
-        if (state.odoFilter === "100k" && (lot.odometer === null || lot.odometer >= 100000)) continue;
-        if (state.odoFilter === "150k" && (lot.odometer === null || lot.odometer >= 150000)) continue;
-        if (state.odoFilter === "200k" && (lot.odometer === null || lot.odometer >= 200000)) continue;
-
-        // Declarations Filter
-        if (state.declFilter === "clean") {
-          const dLower = (lot.declarations || "").toLowerCase();
-          if (dLower.includes("tow") || dLower.includes("frame damage") || dLower.includes("mechanical problems") || dLower.includes("engine noise")) continue;
-        }
-        if (state.declFilter === "warnings") {
-          const dLower = (lot.declarations || "").toLowerCase();
-          if (!dLower.includes("tow") && !dLower.includes("mechanical") && !dLower.includes("frame") && !dLower.includes("noise")) continue;
-        }
-        if (state.declFilter === "repo") {
-          if (!(lot.declarations || "").toLowerCase().includes("repo")) continue;
-        }
-
-        filtered.push({ ...lot, fin, origIdx: i });
-      }
-
-      // 2. Sort
-      filtered.sort((a, b) => {
-        switch (state.sortBy) {
-          case "score_desc":
-            return (b.fin.dealScore ?? -1) - (a.fin.dealScore ?? -1);
-          case "score_asc":
-            return (a.fin.dealScore ?? 999) - (b.fin.dealScore ?? 999);
-          case "bid_desc":
-            return (b.fin.maxBid ?? -1) - (a.fin.maxBid ?? -1);
-          case "resale_desc":
-            return (b.est_resale ?? -1) - (a.est_resale ?? -1);
-          case "year_desc":
-            return b.year - a.year;
-          case "year_asc":
-            return a.year - b.year;
-          case "odo_asc":
-            return (a.odometer ?? 9999999) - (b.odometer ?? 9999999);
-          case "lot_asc":
-          default:
-            return a.origIdx - b.origIdx;
-        }
-      });
-
-      // 3. Update stats counters
-      document.getElementById("visible-count").textContent = filtered.length;
-      document.getElementById("total-count").textContent = RAW_LOTS.length;
-      document.getElementById("feed-visible-count").textContent = filtered.length;
-
-      // 4. Render Cards
-      if (filtered.length === 0) {
-        container.innerHTML = "";
-        emptyState.style.display = "block";
-        return;
-      }
-
-      emptyState.style.display = "none";
-      const fragment = document.createDocumentFragment();
-
-      for (let i = 0; i < filtered.length; i++) {
-        const item = filtered[i];
-        const fin = item.fin;
-
-        // Reserve badge style
-        let resBadgeClass = "reserve-subject";
-        let resBadgeText = item.reserve_str;
-        if (item.reserve_str && item.reserve_str.toLowerCase().includes("unreserved")) {
-          resBadgeClass = "reserve-unreserved";
-          resBadgeText = "UNRESERVED";
-        } else if (typeof item.reserve_num === "number") {
-          resBadgeClass = "reserve-numeric";
-          resBadgeText = "$" + item.reserve_num.toLocaleString() + " RESERVE";
-        }
-
-        // Score badge label
-        let scoreLabel = "NO COMPS";
-        let scoreClass = "score-gray";
-        let scoreDisplay = "--";
-        if (fin.dealScore !== null) {
-          scoreDisplay = fin.dealScore;
-          if (fin.dealScore >= 70) {
-            scoreClass = "score-green";
-            scoreLabel = "GREAT DEAL";
-          } else if (fin.dealScore >= 50) {
-            scoreClass = "score-yellow";
-            scoreLabel = "FAIR DEAL";
-          } else {
-            scoreClass = "score-red";
-            scoreLabel = "THIN MARGIN";
-          }
-        }
-
-        // Declarations badges
-        const declTokens = item.declarations.split(",").map(s => s.trim()).filter(Boolean);
-        const declHtml = declTokens.map(tok => {
-          const tokL = tok.toLowerCase();
-          let cls = "decl-clean";
-          if (tokL.includes("tow") || tokL.includes("frame") || tokL.includes("mechanical") || tokL.includes("noise")) {
-            cls = "decl-danger";
-          } else if (tokL.includes("as is") || tokL.includes("repo")) {
-            cls = "decl-warning";
-          }
-          return `<span class="decl-badge ${cls}">${tok}</span>`;
-        }).join(" ");
-
-        const card = document.createElement("div");
-        card.className = "vehicle-card";
-        card.innerHTML = `
-          <!-- Cover Image Section -->
-          <div class="card-media" onclick="openLightbox('${item.img_path}', '${item.year} ${item.make} ${item.model}')">
-            <img src="${item.img_path}" loading="lazy" alt="${item.make} ${item.model}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'400\' height=\'300\' viewBox=\'0 0 400 300\'><rect width=\'400\' height=\'300\' fill=\'%231e293b\'/><text x=\'50%\' y=\'50%\' fill=\'%2364748b\' font-size=\'18\' dominant-baseline=\'middle\' text-anchor=\'middle\'>Photo Unavailable</text></svg>'">
-            <span class="lot-badge">#${item.lot}</span>
-            <span class="reserve-badge ${resBadgeClass}">${resBadgeText}</span>
-          </div>
-
-          <!-- Card Body -->
-          <div class="card-body">
-            <!-- Header Row -->
-            <div class="card-header-row">
-              <div>
-                <div class="vehicle-title">${item.year} ${item.make} ${item.model}</div>
-                <div class="vehicle-specs-line">
-                  <span>🚗 ${item.odometer_str}</span>
-                  <span>⚙️ ${item.engine || 'Engine N/A'}</span>
-                </div>
-              </div>
-              <div class="score-badge ${scoreClass}">
-                <span class="score-num">${scoreDisplay}</span>
-                <span class="score-label">${scoreLabel}</span>
-              </div>
-            </div>
-
-            <!-- Financial Matrix -->
-            <div class="financial-grid">
-              <div class="fin-box">
-                <span class="fin-title">Est. Resale Price</span>
-                <span class="fin-val highlight-blue">${fmtMoney(item.est_resale)}</span>
-              </div>
-              <div class="fin-box">
-                <span class="fin-title">Max Bid Ceiling</span>
-                <span class="fin-val highlight-green">${fmtMoney(fin.maxBid)}</span>
-              </div>
-              <div class="fin-box">
-                <span class="fin-title">Reserve / Status</span>
-                <span class="fin-val">${item.reserve_str}</span>
-              </div>
-              <div class="fin-box">
-                <span class="fin-title">Est. Buyer Fee</span>
-                <span class="fin-val">${fmtMoney(fin.buyerFee)}</span>
-              </div>
-            </div>
-
-            <!-- Declarations -->
-            <div class="declarations-row">
-              <span style="font-weight:700; color:var(--text-faint); margin-right:4px;">Disclosures:</span>
-              ${declHtml}
-            </div>
-
-            <!-- Action Links -->
-            <div class="card-actions">
-              ${item.cond_link ? `<a class="action-btn action-btn-cond" href="${item.cond_link}" target="_blank">📋 Condition Report</a>` : ''}
-              <a class="action-btn" href="${item.fb_link}" target="_blank">🔎 FB Comps</a>
-              <a class="action-btn" href="${item.at_link}" target="_blank">🚗 AutoTrader Comps</a>
-            </div>
-          </div>
-        `;
-        fragment.appendChild(card);
-      }
-
-      container.innerHTML = "";
-      container.appendChild(fragment);
-    }
-
     // Boot on page load
     initMakeFilter();
-    render();
+    recalculateAllFinances();
+    renderFeed(true);
+    initInfiniteScroll();
   </script>
 </body>
 </html>
